@@ -1,4 +1,6 @@
 # websocket_subscribe
+[![OSCS Status](https://www.oscs1024.com/platform/badge/aibaixun/service-orchestration-backend.git.svg?size=small)](https://www.murphysec.com/dr/EyDvMc4eSKdruyD1hA)
+
 ## 场景
 在物联网以及推送领域，用户需要动态的查看一些实时数据，也就是websocket 订阅功能,举例 用户在前端界面中选择需要查看那些实时数据<br/>
 当用户订阅了某一id 或者说某一类型后 后续的当实体发生变化后会推送给前端
