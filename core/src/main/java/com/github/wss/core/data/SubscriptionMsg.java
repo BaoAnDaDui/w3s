@@ -75,7 +75,7 @@ public class SubscriptionMsg {
         return updateConsumer;
     }
 
-    static public class SubscriptionMsgBuilder{
+    public static  final class SubscriptionMsgBuilder{
         private  String sessionId;
         private  int subId;
 

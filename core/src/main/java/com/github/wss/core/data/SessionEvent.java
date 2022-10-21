@@ -22,7 +22,7 @@ public class SessionEvent {
          * 连接 错误
          */
         ERROR
-    };
+    }
 
 
     private final SessionEventType eventType;

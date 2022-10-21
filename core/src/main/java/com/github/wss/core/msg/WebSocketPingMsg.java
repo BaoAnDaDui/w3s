@@ -1,6 +1,6 @@
 package com.github.wss.core.msg;
 
-import com.github.baoan.data.WebSocketMsgType;
+import com.github.wss.core.data.WebSocketMsgType;
 
 import java.nio.ByteBuffer;
 
@@ -11,7 +11,6 @@ import java.nio.ByteBuffer;
  */
 public class WebSocketPingMsg implements WebSocketMsg<ByteBuffer> {
 
-    public static WebSocketPingMsg INSTANCE = new WebSocketPingMsg();
     private static final ByteBuffer PING_MSG = ByteBuffer.wrap(new byte[]{});
 
     @Override

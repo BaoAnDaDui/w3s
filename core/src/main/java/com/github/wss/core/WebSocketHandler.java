@@ -225,7 +225,6 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
         synchronized void sendPing(long currentTime) {
             try {
                 long timeSinceLastActivity = currentTime - lastActivityTime;
-
                 if (timeSinceLastActivity >= PING_TIMEOUT) {
                     logger.warn(" ping timeout will be Closing session :{}", session.getId());
                     closeSession(CloseStatus.SESSION_NOT_RELIABLE);

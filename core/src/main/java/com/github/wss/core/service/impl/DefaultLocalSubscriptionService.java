@@ -41,10 +41,8 @@ public class DefaultLocalSubscriptionService implements LocalSubscriptionService
         Map<Integer, SubscriptionMsg> sessionSubscriptions = subscriptionsBySessionId.get(sessionId);
         if (sessionSubscriptions != null) {
             SubscriptionMsg subscription = sessionSubscriptions.remove(subscriptionId);
-            if (subscription != null) {
-                if (sessionSubscriptions.isEmpty()) {
-                    subscriptionsBySessionId.remove(sessionId);
-                }
+            if (subscription != null && sessionSubscriptions.isEmpty()) {
+                subscriptionsBySessionId.remove(sessionId);
             }
         }
     }
