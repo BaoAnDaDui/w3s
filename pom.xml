@@ -9,6 +9,8 @@
     <version>1.0</version>
     <modules>
         <module>core</module>
+        <module>example</module>
+        <module>starter</module>
     </modules>
     <packaging>pom</packaging>
 
