@@ -7,7 +7,7 @@ import com.github.wss.core.data.SessionEvent;
 import com.github.wss.core.data.SubscriptionMsg;
 import com.github.wss.core.data.WebSocketSessionRef;
 import com.github.wss.core.subscription.*;
-import com.github.wss.core.util.ServiceCallback;
+import com.github.wss.core.ServiceCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.web.socket.CloseStatus;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.*;
 import static com.github.wss.core.data.WebSocketConstant.*;
@@ -39,7 +40,9 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     private ExecutorService executor;
 
-    private LocalSubscriptionService localSubscriptionService;
+    private LocalSubscriptionManager localSubscriptionService;
+
+    private WebSocketAuthService webSocketAuthService;
 
 
     @PostConstruct
@@ -70,16 +73,16 @@ public class WebSocketServiceImpl implements WebSocketService {
     @Override
     public void handleWebSocketMsg(WebSocketSessionRef sessionRef, String msg) {
         try {
-            SubscriptionCmdWrapper cmdsWrapper = JSON_MAPPER.readValue(msg, SubscriptionCmdWrapper.class);
-            if (cmdsWrapper != null){
-                for (AbstractSubscriptionCmd abstractSubscriptionCmd :cmdsWrapper.getSubs()){
-                    if (checkSubscription(sessionRef,abstractSubscriptionCmd)){
-                        handleSubscriptionCmd(sessionRef, abstractSubscriptionCmd);
-                    }
+            SubscriptionCmdWrapper cmdWrapper = JSON_MAPPER.readValue(msg, SubscriptionCmdWrapper.class);
+            if (Objects.isNull(cmdWrapper)){
+                return;
+            }
+            for (AbstractSubscriptionCmd abstractSubscriptionCmd :cmdWrapper.getSubs()){
+                if (checkSubscription(sessionRef,abstractSubscriptionCmd)){
+                    handleSubscriptionCmd(sessionRef, abstractSubscriptionCmd);
                 }
             }
         }catch (JsonProcessingException e){
-            // FIXME -1 代表失败
             sendWsMsg(sessionRef.getSessionId(), new DefaultSubscriptionDataUpdate(-1, "FAILED_TO_PARSE_WS_COMMAND"));
         }
     }
@@ -152,20 +155,13 @@ public class WebSocketServiceImpl implements WebSocketService {
             if (cmd.isUnSub()) {
                 unsubscribe( cmd, sessionId);
             } else {
-
                 ServiceCallback<Object> callback = new ServiceCallback<>() {
                     @Override
                     public void onSuccess(Object result) {
                         if (null!= result){
                             sendWsMsg(sessionId, new DefaultSubscriptionDataUpdate(cmd.getSubId(), result));
                         }
-                        SubscriptionMsg sub = SubscriptionMsg.SubscriptionMsgBuilder.builder()
-                                .sessionId(sessionId)
-                                .subId(cmd.getSubId())
-                                .entityId(cmd.getEntityId())
-                                .consumer(WebSocketServiceImpl.this::doSendWsMsg)
-                                .build();
-                        localSubscriptionService.addSubscription(sub);
+                        localSubscriptionService.addSubscription(buildSubscriptionMsg(sessionId,cmd));
                     }
 
                     @Override
@@ -173,7 +169,7 @@ public class WebSocketServiceImpl implements WebSocketService {
                         sendWsMsg(sessionId, new DefaultSubscriptionDataUpdate(-1, "FAILED_TO_SUBSCRIPTION"));
                     }
                 };
-                validate(sessionRef,cmd,callback);
+                validateAndFirstQuery(sessionRef,cmd,callback);
             }
         }
     }
@@ -206,10 +202,9 @@ public class WebSocketServiceImpl implements WebSocketService {
      * @param callback callback
      * @param <T> T
      */
-    private <T> void validate(WebSocketSessionRef webSocketSessionRef,AbstractSubscriptionCmd cmd,ServiceCallback<T> callback){
-        // fixme 校验权限
+    private <T> void validateAndFirstQuery(WebSocketSessionRef webSocketSessionRef, AbstractSubscriptionCmd cmd, ServiceCallback<T> callback){
         if (cmd.isFirstQuery()){
-            // fixme 查询数据并回调
+
         }
         callback.onSuccess(null);
 
@@ -228,13 +223,22 @@ public class WebSocketServiceImpl implements WebSocketService {
                 }));
     }
 
+    private SubscriptionMsg buildSubscriptionMsg(String sessionId,AbstractSubscriptionCmd cmd){
+        return SubscriptionMsg.SubscriptionMsgBuilder.builder()
+                .sessionId(sessionId)
+                .subId(cmd.getSubId())
+                .entityId(cmd.getEntityId())
+                .consumer(WebSocketServiceImpl.this::doSendWsMsg)
+                .build();
+    }
+
     @Autowired
     public void setMsgEndpoint(WebSocketMsgEndpoint msgEndpoint) {
         this.msgEndpoint = msgEndpoint;
     }
 
     @Autowired
-    public void setLocalSubscriptionService(LocalSubscriptionService localSubscriptionService) {
+    public void setLocalSubscriptionService(LocalSubscriptionManager localSubscriptionService) {
         this.localSubscriptionService = localSubscriptionService;
     }
 }

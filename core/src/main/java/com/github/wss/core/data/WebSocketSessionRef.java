@@ -11,8 +11,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class WebSocketSessionRef {
 
-    private static  final long serialVersionUID = 1234567890L;
-
     private final String sessionId;
 
     private final Long userId;

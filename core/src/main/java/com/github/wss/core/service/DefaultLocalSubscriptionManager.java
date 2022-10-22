@@ -1,10 +1,9 @@
-package com.github.wss.core.service.impl;
+package com.github.wss.core.service;
 
 
 import com.github.wss.core.data.SubscriptionMsg;
-import com.github.wss.core.service.LocalSubscriptionService;
 import com.github.wss.core.subscription.SubscriptionDataUpdate;
-import com.github.wss.core.util.ServiceCallback;
+import com.github.wss.core.ServiceCallback;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +18,7 @@ import java.util.concurrent.*;
  * date 2022/5/11
  */
 @Service
-public class DefaultLocalSubscriptionService implements LocalSubscriptionService {
+public class DefaultLocalSubscriptionManager implements LocalSubscriptionManager {
 
     private final Map<String, Map<Integer, SubscriptionMsg>> subscriptionsBySessionId = new ConcurrentHashMap<>();
 

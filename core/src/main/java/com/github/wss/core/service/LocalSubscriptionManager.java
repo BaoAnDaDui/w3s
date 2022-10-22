@@ -2,14 +2,14 @@ package com.github.wss.core.service;
 
 import com.github.wss.core.data.SubscriptionMsg;
 import com.github.wss.core.subscription.SubscriptionDataUpdate;
-import com.github.wss.core.util.ServiceCallback;
+import com.github.wss.core.ServiceCallback;
 
 /**
- * 订阅service
+ * 订阅管理
  * @author wang xiao
  * date 2022/5/11
  */
-public interface LocalSubscriptionService {
+public interface LocalSubscriptionManager {
 
     /**
      * 增加订阅消息

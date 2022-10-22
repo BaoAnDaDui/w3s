@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
  */
 public class WebSocketPingMsg implements WebSocketMsg<ByteBuffer> {
 
+    public static final WebSocketPingMsg INSTANCE = new WebSocketPingMsg();
     private static final ByteBuffer PING_MSG = ByteBuffer.wrap(new byte[]{});
 
     @Override
