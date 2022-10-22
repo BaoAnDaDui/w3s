@@ -1,9 +1,9 @@
 package com.github.wss.core.service;
 
 
+import com.github.wss.core.ServiceCallback;
 import com.github.wss.core.data.SubscriptionMsg;
 import com.github.wss.core.subscription.SubscriptionDataUpdate;
-import com.github.wss.core.ServiceCallback;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -26,7 +26,7 @@ public class DefaultLocalSubscriptionManager implements LocalSubscriptionManager
 
     @PostConstruct
     public void initExecutor() {
-        subscriptionUpdateExecutor = new ThreadPoolExecutor(4,100,60, TimeUnit.SECONDS,new SynchronousQueue<>(),new ThreadPoolExecutor.AbortPolicy());
+        subscriptionUpdateExecutor = new ThreadPoolExecutor(4, 100, 60, TimeUnit.SECONDS, new SynchronousQueue<>(), new ThreadPoolExecutor.AbortPolicy());
 
     }
 

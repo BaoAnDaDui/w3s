@@ -2,6 +2,7 @@ package com.github.wss.core.subscription;
 
 /**
  * 订阅id
+ *
  * @author wang xiao
  * date 2022/5/11
  */

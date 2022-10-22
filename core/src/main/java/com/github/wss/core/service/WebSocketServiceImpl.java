@@ -2,12 +2,12 @@ package com.github.wss.core.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.wss.core.ServiceCallback;
 import com.github.wss.core.WebSocketMsgEndpoint;
 import com.github.wss.core.data.SessionEvent;
 import com.github.wss.core.data.SubscriptionMsg;
 import com.github.wss.core.data.WebSocketSessionRef;
 import com.github.wss.core.subscription.*;
-import com.github.wss.core.ServiceCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +18,22 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.*;
+
 import static com.github.wss.core.data.WebSocketConstant.*;
 
 /**
  * 处理web socket 消息以及订阅内容
+ *
  * @author wang xiao
  * date 2022/5/11
  */
 public class WebSocketServiceImpl implements WebSocketService {
 
 
-    private final ConcurrentMap<String, WebSocketSessionRef> sessions = new ConcurrentHashMap<>();
-
-    private final Logger logger = LoggerFactory.getLogger(WebSocketServiceImpl.class);
-
-    private final ConcurrentMap<String, Set<String>> sessionSubscriptions = new ConcurrentHashMap<>();
-
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
-
+    private final ConcurrentMap<String, WebSocketSessionRef> sessions = new ConcurrentHashMap<>();
+    private final Logger logger = LoggerFactory.getLogger(WebSocketServiceImpl.class);
+    private final ConcurrentMap<String, Set<String>> sessionSubscriptions = new ConcurrentHashMap<>();
     private WebSocketMsgEndpoint msgEndpoint;
 
     private ExecutorService executor;
@@ -47,7 +45,7 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     @PostConstruct
     public void initExecutor() {
-        executor = new ThreadPoolExecutor(20,100,60,TimeUnit.SECONDS,new SynchronousQueue<>(),new ThreadPoolExecutor.AbortPolicy());
+        executor = new ThreadPoolExecutor(20, 100, 60, TimeUnit.SECONDS, new SynchronousQueue<>(), new ThreadPoolExecutor.AbortPolicy());
 
         ScheduledExecutorService pingExecutor = Executors.newSingleThreadScheduledExecutor();
         pingExecutor.scheduleWithFixedDelay(this::sendPing, PING_TIMEOUT / NUMBER_OF_PING_ATTEMPTS, PING_TIMEOUT / NUMBER_OF_PING_ATTEMPTS, TimeUnit.MILLISECONDS);
@@ -74,19 +72,18 @@ public class WebSocketServiceImpl implements WebSocketService {
     public void handleWebSocketMsg(WebSocketSessionRef sessionRef, String msg) {
         try {
             SubscriptionCmdWrapper cmdWrapper = JSON_MAPPER.readValue(msg, SubscriptionCmdWrapper.class);
-            if (Objects.isNull(cmdWrapper)){
+            if (Objects.isNull(cmdWrapper)) {
                 return;
             }
-            for (AbstractSubscriptionCmd abstractSubscriptionCmd :cmdWrapper.getSubs()){
-                if (checkSubscription(sessionRef,abstractSubscriptionCmd)){
+            for (AbstractSubscriptionCmd abstractSubscriptionCmd : cmdWrapper.getSubs()) {
+                if (checkSubscription(sessionRef, abstractSubscriptionCmd)) {
                     handleSubscriptionCmd(sessionRef, abstractSubscriptionCmd);
                 }
             }
-        }catch (JsonProcessingException e){
+        } catch (JsonProcessingException e) {
             sendWsMsg(sessionRef.getSessionId(), new DefaultSubscriptionDataUpdate(-1, "FAILED_TO_PARSE_WS_COMMAND"));
         }
     }
-
 
 
     @Override
@@ -124,12 +121,13 @@ public class WebSocketServiceImpl implements WebSocketService {
 
 
     private void processSessionClose(WebSocketSessionRef sessionRef) {
-        String sessionId =  sessionRef.getSessionId();
+        String sessionId = sessionRef.getSessionId();
         sessionSubscriptions.remove(sessionId);
 
     }
+
     private boolean checkSubscription(WebSocketSessionRef sessionRef, SubscriptionCmd cmd) {
-        String subId =  sessionRef.getSessionId() + cmd.getSubId() ;
+        String subId = sessionRef.getSessionId() + cmd.getSubId();
         try {
             Set<String> sessionSubs = sessionSubscriptions.computeIfAbsent(sessionRef.getSessionId(), id -> ConcurrentHashMap.newKeySet());
             synchronized (sessionSubs) {
@@ -153,15 +151,15 @@ public class WebSocketServiceImpl implements WebSocketService {
         String sessionId = sessionRef.getSessionId();
         if (validateSessionRef(sessionRef, cmd, sessionId)) {
             if (cmd.isUnSub()) {
-                unsubscribe( cmd, sessionId);
+                unsubscribe(cmd, sessionId);
             } else {
                 ServiceCallback<Object> callback = new ServiceCallback<>() {
                     @Override
                     public void onSuccess(Object result) {
-                        if (null!= result){
+                        if (null != result) {
                             sendWsMsg(sessionId, new DefaultSubscriptionDataUpdate(cmd.getSubId(), result));
                         }
-                        localSubscriptionService.addSubscription(buildSubscriptionMsg(sessionId,cmd));
+                        localSubscriptionService.addSubscription(buildSubscriptionMsg(sessionId, cmd));
                     }
 
                     @Override
@@ -169,11 +167,10 @@ public class WebSocketServiceImpl implements WebSocketService {
                         sendWsMsg(sessionId, new DefaultSubscriptionDataUpdate(-1, "FAILED_TO_SUBSCRIPTION"));
                     }
                 };
-                validateAndFirstQuery(sessionRef,cmd,callback);
+                validateAndFirstQuery(sessionRef, cmd, callback);
             }
         }
     }
-
 
 
     private boolean validateSessionRef(WebSocketSessionRef sessionRef, SubscriptionCmd cmd, String sessionId) {
@@ -191,19 +188,20 @@ public class WebSocketServiceImpl implements WebSocketService {
         }
     }
 
-    private void unsubscribe( SubscriptionCmd cmd, String sessionId) {
+    private void unsubscribe(SubscriptionCmd cmd, String sessionId) {
         localSubscriptionService.cancelSubscription(sessionId, cmd.getSubId());
     }
 
     /**
      * 这里做校验逻辑和第一次查询逻辑
+     *
      * @param webSocketSessionRef webSocketSessionRef
-     * @param cmd cmd
-     * @param callback callback
-     * @param <T> T
+     * @param cmd                 cmd
+     * @param callback            callback
+     * @param <T>                 T
      */
-    private <T> void validateAndFirstQuery(WebSocketSessionRef webSocketSessionRef, AbstractSubscriptionCmd cmd, ServiceCallback<T> callback){
-        if (cmd.isFirstQuery()){
+    private <T> void validateAndFirstQuery(WebSocketSessionRef webSocketSessionRef, AbstractSubscriptionCmd cmd, ServiceCallback<T> callback) {
+        if (cmd.isFirstQuery()) {
 
         }
         callback.onSuccess(null);
@@ -216,14 +214,14 @@ public class WebSocketServiceImpl implements WebSocketService {
         sessions.values().forEach(sessionRef ->
                 executor.submit(() -> {
                     try {
-                        msgEndpoint.sendPing(sessionRef,currentTime);
+                        msgEndpoint.sendPing(sessionRef, currentTime);
                     } catch (IOException e) {
-                        logger.warn(" {} Failed to send ping: {}",sessionRef.getSessionId(), e);
+                        logger.warn(" {} Failed to send ping: {}", sessionRef.getSessionId(), e);
                     }
                 }));
     }
 
-    private SubscriptionMsg buildSubscriptionMsg(String sessionId,AbstractSubscriptionCmd cmd){
+    private SubscriptionMsg buildSubscriptionMsg(String sessionId, AbstractSubscriptionCmd cmd) {
         return SubscriptionMsg.SubscriptionMsgBuilder.builder()
                 .sessionId(sessionId)
                 .subId(cmd.getSubId())

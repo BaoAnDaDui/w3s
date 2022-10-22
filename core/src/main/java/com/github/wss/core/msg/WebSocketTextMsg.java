@@ -4,10 +4,11 @@ import com.github.wss.core.data.WebSocketMsgType;
 
 /**
  * 报文消息
+ *
  * @author wang xiao
  * date 2022/5/11
  */
-public class WebSocketTextMsg implements WebSocketMsg<String>{
+public class WebSocketTextMsg implements WebSocketMsg<String> {
 
     private final String msg;
 

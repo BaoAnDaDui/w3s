@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * web socket session 的引用
+ *
  * @author wang xiao
  * date 2022/5/11
  */
@@ -55,11 +56,11 @@ public class WebSocketSessionRef {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()){
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
         WebSocketSessionRef that = (WebSocketSessionRef) o;
-        return Objects.equals(sessionId,that.sessionId);
+        return Objects.equals(sessionId, that.sessionId);
     }
 
     @Override

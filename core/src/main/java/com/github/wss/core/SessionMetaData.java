@@ -42,7 +42,7 @@ public class SessionMetaData implements SendHandler {
 
     private volatile long lastActivityTime;
 
-    SessionMetaData(WebSocketSession session, WebSocketSessionRef sessionRef, WebSocketMsgEndpoint webSocketMsgEndpointRef,int maxMsgQueuePerSession) {
+    SessionMetaData(WebSocketSession session, WebSocketSessionRef sessionRef, WebSocketMsgEndpoint webSocketMsgEndpointRef, int maxMsgQueuePerSession) {
         super();
         this.session = session;
         Session nativeSession = ((NativeWebSocketSession) session).getNativeSession(Session.class);
@@ -62,7 +62,7 @@ public class SessionMetaData implements SendHandler {
                 closeSession(CloseStatus.SESSION_NOT_RELIABLE);
             } else if (timeSinceLastActivity >= PING_TIMEOUT / NUMBER_OF_PING_ATTEMPTS) {
                 sendMsg(WebSocketPingMsg.INSTANCE);
-            }else {
+            } else {
                 // do nothing
             }
         } catch (Exception e) {

@@ -19,7 +19,7 @@ public class SubscriptionMsg {
     private final BiConsumer<String, SubscriptionDataUpdate> updateConsumer;
 
 
-    public SubscriptionMsg( String sessionId, int subId, String entityId, BiConsumer<String, SubscriptionDataUpdate> updateConsumer) {
+    public SubscriptionMsg(String sessionId, int subId, String entityId, BiConsumer<String, SubscriptionDataUpdate> updateConsumer) {
         this.sessionId = sessionId;
         this.subId = subId;
         this.entityId = entityId;
@@ -75,41 +75,40 @@ public class SubscriptionMsg {
         return updateConsumer;
     }
 
-    public static  final class SubscriptionMsgBuilder{
-        private  String sessionId;
-        private  int subId;
+    public static final class SubscriptionMsgBuilder {
+        private String sessionId;
+        private int subId;
 
-        private  String entityId;
+        private String entityId;
 
-        private  BiConsumer<String, SubscriptionDataUpdate> consumer;
+        private BiConsumer<String, SubscriptionDataUpdate> consumer;
 
+        public static SubscriptionMsgBuilder builder() {
+            return new SubscriptionMsgBuilder();
+        }
 
-
-        public SubscriptionMsgBuilder sessionId(String sessionId){
+        public SubscriptionMsgBuilder sessionId(String sessionId) {
             this.sessionId = sessionId;
             return this;
         }
 
-        public SubscriptionMsgBuilder subId(int subId){
+        public SubscriptionMsgBuilder subId(int subId) {
             this.subId = subId;
             return this;
         }
 
-        public SubscriptionMsgBuilder entityId(String entityId){
+        public SubscriptionMsgBuilder entityId(String entityId) {
             this.entityId = entityId;
             return this;
         }
 
-        public SubscriptionMsgBuilder consumer(BiConsumer<String, SubscriptionDataUpdate> consumer){
+        public SubscriptionMsgBuilder consumer(BiConsumer<String, SubscriptionDataUpdate> consumer) {
             this.consumer = consumer;
             return this;
         }
 
         public SubscriptionMsg build() {
-            return new SubscriptionMsg(this.sessionId,this.subId,this.entityId,this.consumer);
-        }
-        public  static   SubscriptionMsgBuilder  builder(){
-            return new SubscriptionMsgBuilder() ;
+            return new SubscriptionMsg(this.sessionId, this.subId, this.entityId, this.consumer);
         }
     }
 }

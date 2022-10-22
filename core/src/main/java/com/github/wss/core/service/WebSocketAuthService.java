@@ -8,17 +8,19 @@ public interface WebSocketAuthService {
 
     /**
      * 授权 web socket 地址 并返回用户id 抛出异常为失败
+     *
      * @param path web socket 地址
      * @return 用户id
      */
-    Long authAndReturnUserId (String path);
+    Long authAndReturnUserId(String path);
 
 
     /**
      * 判断 是否超出 用户限制数
+     *
      * @param sessionId session id
-     * @param userId user id
+     * @param userId    user id
      * @return boolean
      */
-    boolean checkLimits(String sessionId,Long userId);
+    boolean checkLimits(String sessionId, Long userId);
 }

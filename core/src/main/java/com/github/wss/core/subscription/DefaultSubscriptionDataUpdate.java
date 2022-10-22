@@ -4,7 +4,7 @@ package com.github.wss.core.subscription;
  * @author wang xiao
  * date 2022/5/11
  */
-public class DefaultSubscriptionDataUpdate implements SubscriptionDataUpdate{
+public class DefaultSubscriptionDataUpdate implements SubscriptionDataUpdate {
 
     private final int subId;
 
