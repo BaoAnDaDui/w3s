@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.github.w3s.WssConf \
+com.github.w3s.WebSocketHandler \
+com.github.w3s.DefaultLocalSubscriptionManager \
+com.github.w3s.WebSocketServiceImpl

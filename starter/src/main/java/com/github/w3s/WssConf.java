@@ -1,10 +1,18 @@
 package com.github.w3s;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
 /**
  * @author wang xiao
  * date 2022/10/24
  */
-public  class WssConf {
+@Configuration
+
+@ConfigurationProperties(prefix = "w3s")
+@ConditionalOnProperty(prefix = "w3s", name = "opened", havingValue = "true")
+public class WssConf {
 
 
     private String wsUrlPrefix;

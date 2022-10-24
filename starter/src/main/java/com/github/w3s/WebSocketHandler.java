@@ -23,6 +23,7 @@ import javax.websocket.Session;
 import java.io.IOException;
 import java.net.URI;
 import java.security.InvalidParameterException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -47,7 +48,7 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
      */
     private static final ConcurrentMap<String, String> EXTERNAL_SESSION_MAP = new ConcurrentHashMap<>();
     private final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
-    private WebSocketAuthService webSocketAuthServer;
+    private Optional<WebSocketAuthService> webSocketAuthServer;
 
 
     private WebSocketService webSocketService;
@@ -78,7 +79,8 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
             String internalSessionId = session.getId();
             WebSocketSessionRef sessionRef = toRef(session);
             String externalSessionId = sessionRef.getSessionId();
-            if (!webSocketAuthServer.checkLimits(internalSessionId, sessionRef.getUserId())) {
+            boolean authRes = webSocketAuthServer.map(e -> e.checkLimits(internalSessionId, sessionRef.getUserId())).orElse(false);
+            if (!authRes) {
                 return;
             }
             INTERNAL_SESSION_MAP.put(internalSessionId, new SessionMetaData(session, sessionRef, this, 1000));
@@ -163,11 +165,12 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
         URI sessionUri = session.getUri();
         assert sessionUri != null;
         String path = sessionUri.getPath();
-        path = path.substring(wssConf.getWsUrlPrefix().length());
+        String uriPath = path.substring(wssConf.getWsUrlPrefix().length());
         if (path.length() == 0) {
             throw new IllegalArgumentException("URL should contain plugin token!");
         }
-        Long userId = webSocketAuthServer.authAndReturnUserId(path);
+        Long userId = webSocketAuthServer.map(e -> e.authAndReturnUserId(uriPath)).orElse(0L);
+        ;
         return new WebSocketSessionRef(UUID.randomUUID().toString(), userId, session.getLocalAddress(), session.getRemoteAddress());
     }
 
@@ -180,9 +183,8 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
         }
     }
 
-
     @Autowired
-    public void setWebSocketAuthServer(WebSocketAuthService webSocketAuthServer) {
+    public void setWebSocketAuthServer(Optional<WebSocketAuthService> webSocketAuthServer) {
         this.webSocketAuthServer = webSocketAuthServer;
     }
 
