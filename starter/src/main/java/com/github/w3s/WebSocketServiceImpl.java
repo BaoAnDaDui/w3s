@@ -1,15 +1,15 @@
-package com.github.wss;
+package com.github.w3s;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.wss.core.service.LocalSubscriptionManager;
-import com.github.wss.core.service.ServiceCallback;
-import com.github.wss.core.WebSocketMsgEndpoint;
-import com.github.wss.core.session.SessionEvent;
-import com.github.wss.core.SubscriptionMsg;
-import com.github.wss.core.session.WebSocketSessionRef;
-import com.github.wss.core.service.WebSocketService;
-import com.github.wss.core.subscription.*;
+import com.github.w3s.core.SubscriptionMsg;
+import com.github.w3s.core.WebSocketMsgEndpoint;
+import com.github.w3s.core.service.LocalSubscriptionManager;
+import com.github.w3s.core.service.ServiceCallback;
+import com.github.w3s.core.service.WebSocketService;
+import com.github.w3s.core.session.SessionEvent;
+import com.github.w3s.core.session.WebSocketSessionRef;
+import com.github.w3s.core.subscription.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     private LocalSubscriptionManager localSubscriptionService;
 
-    private WebSocketAuthService webSocketAuthService;
+    private WssConf wssConf;
 
 
     @PostConstruct
@@ -49,17 +49,17 @@ public class WebSocketServiceImpl implements WebSocketService {
         executor = new ThreadPoolExecutor(20, 100, 60, TimeUnit.SECONDS, new SynchronousQueue<>(), new ThreadPoolExecutor.AbortPolicy());
 
         ScheduledExecutorService pingExecutor = Executors.newSingleThreadScheduledExecutor();
-        pingExecutor.scheduleWithFixedDelay(this::sendPing, WebSocketConstant.PING_TIMEOUT / WebSocketConstant.NUMBER_OF_PING_ATTEMPTS, WebSocketConstant.PING_TIMEOUT / WebSocketConstant.NUMBER_OF_PING_ATTEMPTS, TimeUnit.MILLISECONDS);
+        pingExecutor.scheduleWithFixedDelay(this::sendPing, wssConf.getPingTimeout()/ wssConf.getNumberOfPingAttempts(), wssConf.getPingTimeout() / wssConf.getNumberOfPingAttempts(), TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void handleWebSocketSessionEvent(WebSocketSessionRef sessionRef, SessionEvent sessionEvent) {
         String sessionId = sessionRef.getSessionId();
         switch (sessionEvent.getEventType()) {
-            case SessionEventType.ESTABLISHED:
+            case ESTABLISHED:
                 sessions.put(sessionId, sessionRef);
                 break;
-            case SessionEventType.CLOSED:
+            case CLOSED:
                 sessions.remove(sessionId);
                 localSubscriptionService.cancelAllSessionSubscriptions(sessionId);
                 processSessionClose(sessionRef);
@@ -134,7 +134,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             synchronized (sessionSubs) {
                 if (cmd.isUnSub()) {
                     sessionSubs.remove(subId);
-                } else if (sessionSubs.size() < WebSocketConstant.MAX_SUB_OF_SESSION) {
+                } else if (sessionSubs.size() < wssConf.getMaxSubOfSession()) {
                     sessionSubs.add(subId);
                 } else {
                     msgEndpoint.close(sessionRef, CloseStatus.POLICY_VIOLATION.withReason("Max subscriptions limit reached!"));

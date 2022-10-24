@@ -1,4 +1,4 @@
-package com.github.wss.core.msg;
+package com.github.w3s.core.msg;
 
 import java.nio.ByteBuffer;
 

@@ -1,8 +1,8 @@
-package com.github.wss.core.service;
+package com.github.w3s.core.service;
 
-import com.github.wss.core.session.SessionEvent;
-import com.github.wss.core.session.WebSocketSessionRef;
-import com.github.wss.core.subscription.SubscriptionDataUpdate;
+import com.github.w3s.core.session.SessionEvent;
+import com.github.w3s.core.session.WebSocketSessionRef;
+import com.github.w3s.core.subscription.SubscriptionDataUpdate;
 import org.springframework.web.socket.CloseStatus;
 
 /**

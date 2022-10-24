@@ -1,11 +1,12 @@
-package com.github.wss;
+package com.github.w3s;
 
-import com.github.wss.core.WebSocketMsgEndpoint;
-import com.github.wss.core.service.WebSocketAuthService;
-import com.github.wss.core.service.WebSocketService;
-import com.github.wss.core.session.SessionEvent;
-import com.github.wss.core.session.SessionMetaData;
-import com.github.wss.core.session.WebSocketSessionRef;
+import com.github.w3s.core.WebSocketMsgEndpoint;
+import com.github.w3s.core.WssException;
+import com.github.w3s.core.service.WebSocketAuthService;
+import com.github.w3s.core.service.WebSocketService;
+import com.github.w3s.core.session.SessionEvent;
+import com.github.w3s.core.session.SessionMetaData;
+import com.github.w3s.core.session.WebSocketSessionRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationNotAllowedException;
@@ -51,13 +52,15 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
 
     private WebSocketService webSocketService;
 
+    private WssConf wssConf;
+
 
     @Override
     public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
         super.handleTransportError(session, exception);
         SessionMetaData sessionMd = INTERNAL_SESSION_MAP.get(session.getId());
         if (sessionMd != null) {
-            processSessionEvent(sessionMd.getSessionRef(), SessionEvent.onError(exception));
+            processSessionEvent(sessionMd.getSessionRef(), SessionEvent.onError(new WssException(exception)));
         }
     }
 
@@ -69,7 +72,7 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
             if (session instanceof NativeWebSocketSession) {
                 Session nativeSession = ((NativeWebSocketSession) session).getNativeSession(Session.class);
                 if (nativeSession != null) {
-                    nativeSession.getAsyncRemote().setSendTimeout(SEND_TIMEOUT);
+                    nativeSession.getAsyncRemote().setSendTimeout(wssConf.getSendTimeOut());
                 }
             }
             String internalSessionId = session.getId();
@@ -160,7 +163,7 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
         URI sessionUri = session.getUri();
         assert sessionUri != null;
         String path = sessionUri.getPath();
-        path = path.substring(WS_PLUGIN_PREFIX.length());
+        path = path.substring(wssConf.getWsUrlPrefix().length());
         if (path.length() == 0) {
             throw new IllegalArgumentException("URL should contain plugin token!");
         }

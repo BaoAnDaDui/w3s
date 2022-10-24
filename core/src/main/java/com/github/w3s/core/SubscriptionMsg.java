@@ -1,6 +1,6 @@
-package com.github.wss.core;
+package com.github.w3s.core;
 
-import com.github.wss.core.subscription.SubscriptionDataUpdate;
+import com.github.w3s.core.subscription.SubscriptionDataUpdate;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;

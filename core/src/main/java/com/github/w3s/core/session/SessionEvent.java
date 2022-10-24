@@ -1,6 +1,6 @@
-package com.github.wss.core.session;
+package com.github.w3s.core.session;
 
-import com.github.wss.core.WssException;
+import com.github.w3s.core.WssException;
 
 import java.util.Optional;
 
@@ -41,18 +41,4 @@ public class SessionEvent {
         return Optional.ofNullable(error);
     }
 
-    public enum SessionEventType {
-        /**
-         * 连接建立
-         */
-        ESTABLISHED,
-        /**
-         * 连接 关闭
-         */
-        CLOSED,
-        /**
-         * 连接 错误
-         */
-        ERROR
-    }
 }

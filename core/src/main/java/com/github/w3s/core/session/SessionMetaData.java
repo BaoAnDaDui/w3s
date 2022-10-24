@@ -1,10 +1,10 @@
-package com.github.wss.core.session;
+package com.github.w3s.core.session;
 
-import com.github.wss.core.WebSocketMsgEndpoint;
-import com.github.wss.core.msg.WebSocketMsgType;
-import com.github.wss.core.msg.WebSocketMsg;
-import com.github.wss.core.msg.WebSocketPingMsg;
-import com.github.wss.core.msg.WebSocketTextMsg;
+import com.github.w3s.core.msg.WebSocketMsg;
+import com.github.w3s.core.msg.WebSocketMsgType;
+import com.github.w3s.core.msg.WebSocketPingMsg;
+import com.github.w3s.core.msg.WebSocketTextMsg;
+import com.github.w3s.core.WebSocketMsgEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.CloseStatus;
@@ -44,7 +44,7 @@ public class SessionMetaData implements SendHandler {
 
     private volatile long lastActivityTime;
 
-    SessionMetaData(WebSocketSession session, WebSocketSessionRef sessionRef, WebSocketMsgEndpoint webSocketMsgEndpointRef, int maxMsgQueuePerSession) {
+    public SessionMetaData(WebSocketSession session, WebSocketSessionRef sessionRef, WebSocketMsgEndpoint webSocketMsgEndpointRef, int maxMsgQueuePerSession) {
         super();
         this.session = session;
         Session nativeSession = ((NativeWebSocketSession) session).getNativeSession(Session.class);
@@ -56,7 +56,7 @@ public class SessionMetaData implements SendHandler {
         this.webSocketMsgEndpointRef = webSocketMsgEndpointRef;
     }
 
-    synchronized void sendPing(long currentTime) {
+    public synchronized void sendPing(long currentTime) {
         try {
             long timeSinceLastActivity = currentTime - lastActivityTime;
             if (timeSinceLastActivity >= PING_TIMEOUT) {
@@ -81,11 +81,11 @@ public class SessionMetaData implements SendHandler {
         }
     }
 
-    synchronized void processPongMessage(long currentTime) {
+    public synchronized void processPongMessage(long currentTime) {
         lastActivityTime = currentTime;
     }
 
-    synchronized void sendMsg(String msg) {
+    public synchronized void sendMsg(String msg) {
         sendMsg(new WebSocketTextMsg(msg));
     }
 

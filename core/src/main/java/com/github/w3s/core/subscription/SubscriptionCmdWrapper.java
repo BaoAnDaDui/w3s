@@ -1,4 +1,4 @@
-package com.github.wss.core.subscription;
+package com.github.w3s.core.subscription;
 
 import java.util.List;
 

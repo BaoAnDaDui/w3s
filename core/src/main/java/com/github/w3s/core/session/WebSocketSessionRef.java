@@ -1,4 +1,4 @@
-package com.github.wss.core.session;
+package com.github.w3s.core.session;
 
 import java.net.InetSocketAddress;
 import java.util.Objects;

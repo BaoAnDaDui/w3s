@@ -1,7 +1,7 @@
-package com.github.wss.core.service;
+package com.github.w3s.core.service;
 
-import com.github.wss.core.SubscriptionMsg;
-import com.github.wss.core.subscription.SubscriptionDataUpdate;
+import com.github.w3s.core.subscription.SubscriptionDataUpdate;
+import com.github.w3s.core.SubscriptionMsg;
 
 /**
  * 订阅管理

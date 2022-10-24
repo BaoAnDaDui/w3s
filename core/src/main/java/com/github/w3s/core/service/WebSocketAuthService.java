@@ -1,4 +1,4 @@
-package com.github.wss.core.service;
+package com.github.w3s.core.service;
 
 /**
  * @author wang xiao

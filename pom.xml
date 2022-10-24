@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.baoan</groupId>
-    <artifactId>wss</artifactId>
+    <artifactId>w3s</artifactId>
     <version>1.0</version>
     <modules>
         <module>core</module>
@@ -35,11 +35,11 @@
                 <version>${spring-boot.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.baoan.wss</groupId>
-                <artifactId>wss-core</artifactId>
+                <groupId>com.github.baoan.w3s</groupId>
+                <artifactId>w3s-core</artifactId>
             </dependency>
             <dependency>
-                <groupId>com.github.baoan.wss</groupId>
+                <groupId>com.github.baoan.w3s</groupId>
                 <artifactId>spring-boot-starter</artifactId>
             </dependency>
         </dependencies>

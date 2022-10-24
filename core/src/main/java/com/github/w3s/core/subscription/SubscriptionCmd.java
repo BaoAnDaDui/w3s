@@ -1,4 +1,4 @@
-package com.github.wss.core.subscription;
+package com.github.w3s.core.subscription;
 
 /**
  * 订阅命令

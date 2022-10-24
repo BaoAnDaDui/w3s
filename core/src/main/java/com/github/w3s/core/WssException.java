@@ -1,4 +1,4 @@
-package com.github.wss.core;
+package com.github.w3s.core;
 
 /**
  * @author wang xiao
@@ -8,6 +8,10 @@ public class WssException extends RuntimeException{
 
     public WssException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    public WssException(Throwable cause) {
+        super(cause);
     }
 
     @Override

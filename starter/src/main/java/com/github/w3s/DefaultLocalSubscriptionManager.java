@@ -1,10 +1,10 @@
-package com.github.wss;
+package com.github.w3s;
 
 
-import com.github.wss.core.service.LocalSubscriptionManager;
-import com.github.wss.core.service.ServiceCallback;
-import com.github.wss.core.SubscriptionMsg;
-import com.github.wss.core.subscription.SubscriptionDataUpdate;
+import com.github.w3s.core.service.LocalSubscriptionManager;
+import com.github.w3s.core.service.ServiceCallback;
+import com.github.w3s.core.SubscriptionMsg;
+import com.github.w3s.core.subscription.SubscriptionDataUpdate;
 
 import javax.annotation.PostConstruct;
 import java.util.Collections;
