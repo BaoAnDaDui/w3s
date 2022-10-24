@@ -1,0 +1,9 @@
+server:
+  port: 8080
+w3s:
+  opened: true
+  wsUrlPrefix: ws
+  sendTimeOut: 1000
+  maxSubOfSession: 19
+  pingTimeout: 1000
+  numberOfPingAttempts: 10

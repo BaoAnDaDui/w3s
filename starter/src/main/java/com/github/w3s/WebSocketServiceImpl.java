@@ -13,6 +13,8 @@ import com.github.w3s.core.subscription.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.socket.CloseStatus;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +30,11 @@ import java.util.concurrent.*;
  * @author wang xiao
  * date 2022/5/11
  */
+@Import( value = {
+        com.github.w3s.W3sConf.class,
+        com.github.w3s.DefaultLocalSubscriptionManager.class
+})
+@ConditionalOnProperty(prefix = "w3s", name = "opened", havingValue = "true")
 public class WebSocketServiceImpl implements WebSocketService {
 
 
@@ -41,7 +48,7 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     private LocalSubscriptionManager localSubscriptionService;
 
-    private WssConf wssConf;
+    private W3sConf wssConf;
 
 
     @PostConstruct
@@ -237,5 +244,10 @@ public class WebSocketServiceImpl implements WebSocketService {
     @Autowired
     public void setLocalSubscriptionService(LocalSubscriptionManager localSubscriptionService) {
         this.localSubscriptionService = localSubscriptionService;
+    }
+
+    @Autowired
+    public void setWssConf(W3sConf wssConf) {
+        this.wssConf = wssConf;
     }
 }

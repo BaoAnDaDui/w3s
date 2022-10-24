@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationNotAllowedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.PongMessage;
 import org.springframework.web.socket.TextMessage;
@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author wang xiao
  * date 2022/5/11
  */
-@Service
+@ConditionalOnProperty(prefix = "w3s", name = "opened", havingValue = "true")
 public class WebSocketHandler extends TextWebSocketHandler implements WebSocketMsgEndpoint {
 
 
@@ -53,7 +53,7 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
 
     private WebSocketService webSocketService;
 
-    private WssConf wssConf;
+    private W3sConf wssConf;
 
 
     @Override
@@ -194,7 +194,7 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
     }
 
     @Autowired
-    public void setWssConf(WssConf wssConf) {
+    public void setWssConf(W3sConf wssConf) {
         this.wssConf = wssConf;
     }
 }

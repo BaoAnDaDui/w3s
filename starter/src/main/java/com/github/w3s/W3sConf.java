@@ -1,6 +1,5 @@
 package com.github.w3s;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,19 +10,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 
 @ConfigurationProperties(prefix = "w3s")
-@ConditionalOnProperty(prefix = "w3s", name = "opened", havingValue = "true")
-public class WssConf {
+public class W3sConf {
 
 
     private String wsUrlPrefix;
 
-    private int sendTimeOut;
+    private Integer sendTimeOut = 5000;
 
-    private int maxSubOfSession;
+    private Integer maxSubOfSession = 10;
 
-    private int pingTimeout;
+    private Integer pingTimeout = 30000;
 
-    private int numberOfPingAttempts;
+    private Integer numberOfPingAttempts = 20;
 
     public String getWsUrlPrefix() {
         return wsUrlPrefix;
@@ -33,35 +31,35 @@ public class WssConf {
         this.wsUrlPrefix = wsUrlPrefix;
     }
 
-    public int getSendTimeOut() {
+    public Integer getSendTimeOut() {
         return sendTimeOut;
     }
 
-    public void setSendTimeOut(int sendTimeOut) {
+    public void setSendTimeOut(Integer sendTimeOut) {
         this.sendTimeOut = sendTimeOut;
     }
 
-    public int getMaxSubOfSession() {
+    public Integer getMaxSubOfSession() {
         return maxSubOfSession;
     }
 
-    public void setMaxSubOfSession(int maxSubOfSession) {
+    public void setMaxSubOfSession(Integer maxSubOfSession) {
         this.maxSubOfSession = maxSubOfSession;
     }
 
-    public int getPingTimeout() {
+    public Integer getPingTimeout() {
         return pingTimeout;
     }
 
-    public void setPingTimeout(int pingTimeout) {
+    public void setPingTimeout(Integer pingTimeout) {
         this.pingTimeout = pingTimeout;
     }
 
-    public int getNumberOfPingAttempts() {
+    public Integer getNumberOfPingAttempts() {
         return numberOfPingAttempts;
     }
 
-    public void setNumberOfPingAttempts(int numberOfPingAttempts) {
+    public void setNumberOfPingAttempts(Integer numberOfPingAttempts) {
         this.numberOfPingAttempts = numberOfPingAttempts;
     }
 }

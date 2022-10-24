@@ -5,6 +5,7 @@ import com.github.w3s.core.service.LocalSubscriptionManager;
 import com.github.w3s.core.service.ServiceCallback;
 import com.github.w3s.core.SubscriptionMsg;
 import com.github.w3s.core.subscription.SubscriptionDataUpdate;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import javax.annotation.PostConstruct;
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.concurrent.*;
  * @author wang xiao
  * date 2022/5/11
  */
+
 public class DefaultLocalSubscriptionManager implements LocalSubscriptionManager {
 
     private final Map<String, Map<Integer, SubscriptionMsg>> subscriptionsBySessionId = new ConcurrentHashMap<>();
