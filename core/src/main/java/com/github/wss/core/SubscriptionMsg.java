@@ -1,4 +1,4 @@
-package com.github.wss.core.data;
+package com.github.wss.core;
 
 import com.github.wss.core.subscription.SubscriptionDataUpdate;
 

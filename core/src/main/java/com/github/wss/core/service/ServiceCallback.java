@@ -1,4 +1,4 @@
-package com.github.wss.core;
+package com.github.wss.core.service;
 
 /**
  * 服务回调

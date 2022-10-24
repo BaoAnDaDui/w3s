@@ -1,7 +1,6 @@
 package com.github.wss.core.service;
 
-import com.github.wss.core.ServiceCallback;
-import com.github.wss.core.data.SubscriptionMsg;
+import com.github.wss.core.SubscriptionMsg;
 import com.github.wss.core.subscription.SubscriptionDataUpdate;
 
 /**

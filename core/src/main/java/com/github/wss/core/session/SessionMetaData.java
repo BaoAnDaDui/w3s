@@ -1,7 +1,7 @@
-package com.github.wss.core;
+package com.github.wss.core.session;
 
-import com.github.wss.core.data.WebSocketMsgType;
-import com.github.wss.core.data.WebSocketSessionRef;
+import com.github.wss.core.WebSocketMsgEndpoint;
+import com.github.wss.core.msg.WebSocketMsgType;
 import com.github.wss.core.msg.WebSocketMsg;
 import com.github.wss.core.msg.WebSocketPingMsg;
 import com.github.wss.core.msg.WebSocketTextMsg;
@@ -19,14 +19,16 @@ import java.io.IOException;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static com.github.wss.core.data.WebSocketConstant.NUMBER_OF_PING_ATTEMPTS;
-import static com.github.wss.core.data.WebSocketConstant.PING_TIMEOUT;
 
 /**
  * @author wang xiao
  * date 2022/10/22
  */
 public class SessionMetaData implements SendHandler {
+
+    private static final int NUMBER_OF_PING_ATTEMPTS = 3;
+
+    private static final long PING_TIMEOUT = 30000;
 
     private final Logger logger = LoggerFactory.getLogger(SessionMetaData.class);
     private final WebSocketSession session;

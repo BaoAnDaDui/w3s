@@ -1,4 +1,6 @@
-package com.github.wss.core.data;
+package com.github.wss.core.session;
+
+import com.github.wss.core.WssException;
 
 import java.util.Optional;
 
@@ -11,12 +13,12 @@ import java.util.Optional;
 public class SessionEvent {
 
     private final SessionEventType eventType;
-    private final Optional<Throwable> error;
+    private final WssException error;
 
-    private SessionEvent(SessionEventType eventType, Throwable error) {
+    private SessionEvent(SessionEventType eventType, WssException error) {
         super();
         this.eventType = eventType;
-        this.error = Optional.ofNullable(error);
+        this.error = error;
     }
 
     public static SessionEvent onEstablished() {
@@ -27,7 +29,7 @@ public class SessionEvent {
         return new SessionEvent(SessionEventType.CLOSED, null);
     }
 
-    public static SessionEvent onError(Throwable t) {
+    public static SessionEvent onError(WssException t) {
         return new SessionEvent(SessionEventType.ERROR, t);
     }
 
@@ -35,8 +37,8 @@ public class SessionEvent {
         return eventType;
     }
 
-    public Optional<Throwable> getError() {
-        return error;
+    public Optional<WssException> getError() {
+        return Optional.ofNullable(error);
     }
 
     public enum SessionEventType {

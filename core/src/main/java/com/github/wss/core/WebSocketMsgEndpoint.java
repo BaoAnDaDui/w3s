@@ -1,6 +1,6 @@
 package com.github.wss.core;
 
-import com.github.wss.core.data.WebSocketSessionRef;
+import com.github.wss.core.session.WebSocketSessionRef;
 import org.springframework.web.socket.CloseStatus;
 
 import java.io.IOException;

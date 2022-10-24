@@ -1,12 +1,14 @@
-package com.github.wss.core.service;
+package com.github.wss;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.wss.core.ServiceCallback;
+import com.github.wss.core.service.LocalSubscriptionManager;
+import com.github.wss.core.service.ServiceCallback;
 import com.github.wss.core.WebSocketMsgEndpoint;
-import com.github.wss.core.data.SessionEvent;
-import com.github.wss.core.data.SubscriptionMsg;
-import com.github.wss.core.data.WebSocketSessionRef;
+import com.github.wss.core.session.SessionEvent;
+import com.github.wss.core.SubscriptionMsg;
+import com.github.wss.core.session.WebSocketSessionRef;
+import com.github.wss.core.service.WebSocketService;
 import com.github.wss.core.subscription.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +21,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.*;
 
-import static com.github.wss.core.data.WebSocketConstant.*;
 
 /**
  * 处理web socket 消息以及订阅内容
@@ -48,17 +49,17 @@ public class WebSocketServiceImpl implements WebSocketService {
         executor = new ThreadPoolExecutor(20, 100, 60, TimeUnit.SECONDS, new SynchronousQueue<>(), new ThreadPoolExecutor.AbortPolicy());
 
         ScheduledExecutorService pingExecutor = Executors.newSingleThreadScheduledExecutor();
-        pingExecutor.scheduleWithFixedDelay(this::sendPing, PING_TIMEOUT / NUMBER_OF_PING_ATTEMPTS, PING_TIMEOUT / NUMBER_OF_PING_ATTEMPTS, TimeUnit.MILLISECONDS);
+        pingExecutor.scheduleWithFixedDelay(this::sendPing, WebSocketConstant.PING_TIMEOUT / WebSocketConstant.NUMBER_OF_PING_ATTEMPTS, WebSocketConstant.PING_TIMEOUT / WebSocketConstant.NUMBER_OF_PING_ATTEMPTS, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void handleWebSocketSessionEvent(WebSocketSessionRef sessionRef, SessionEvent sessionEvent) {
         String sessionId = sessionRef.getSessionId();
         switch (sessionEvent.getEventType()) {
-            case ESTABLISHED:
+            case SessionEventType.ESTABLISHED:
                 sessions.put(sessionId, sessionRef);
                 break;
-            case CLOSED:
+            case SessionEventType.CLOSED:
                 sessions.remove(sessionId);
                 localSubscriptionService.cancelAllSessionSubscriptions(sessionId);
                 processSessionClose(sessionRef);
@@ -133,7 +134,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             synchronized (sessionSubs) {
                 if (cmd.isUnSub()) {
                     sessionSubs.remove(subId);
-                } else if (sessionSubs.size() < MAX_SUB_OF_SESSION) {
+                } else if (sessionSubs.size() < WebSocketConstant.MAX_SUB_OF_SESSION) {
                     sessionSubs.add(subId);
                 } else {
                     msgEndpoint.close(sessionRef, CloseStatus.POLICY_VIOLATION.withReason("Max subscriptions limit reached!"));
@@ -161,7 +162,6 @@ public class WebSocketServiceImpl implements WebSocketService {
                         }
                         localSubscriptionService.addSubscription(buildSubscriptionMsg(sessionId, cmd));
                     }
-
                     @Override
                     public void onFailure(Throwable throwable) {
                         sendWsMsg(sessionId, new DefaultSubscriptionDataUpdate(-1, "FAILED_TO_SUBSCRIPTION"));

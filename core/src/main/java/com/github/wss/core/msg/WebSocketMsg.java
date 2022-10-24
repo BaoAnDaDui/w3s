@@ -1,7 +1,5 @@
 package com.github.wss.core.msg;
 
-import com.github.wss.core.data.WebSocketMsgType;
-
 /**
  * web socket 消息
  *

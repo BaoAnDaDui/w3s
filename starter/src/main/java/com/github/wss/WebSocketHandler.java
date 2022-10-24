@@ -1,9 +1,11 @@
-package com.github.wss.core;
+package com.github.wss;
 
-import com.github.wss.core.data.SessionEvent;
-import com.github.wss.core.data.WebSocketSessionRef;
+import com.github.wss.core.WebSocketMsgEndpoint;
 import com.github.wss.core.service.WebSocketAuthService;
 import com.github.wss.core.service.WebSocketService;
+import com.github.wss.core.session.SessionEvent;
+import com.github.wss.core.session.SessionMetaData;
+import com.github.wss.core.session.WebSocketSessionRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationNotAllowedException;
@@ -24,8 +26,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static com.github.wss.core.data.WebSocketConstant.SEND_TIMEOUT;
-import static com.github.wss.core.data.WebSocketConstant.WS_PLUGIN_PREFIX;
 
 /**
  * web socket 处理类

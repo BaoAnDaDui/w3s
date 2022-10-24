@@ -1,4 +1,4 @@
-package com.github.wss.core.data;
+package com.github.wss.core.msg;
 
 /**
  * 消息类型
