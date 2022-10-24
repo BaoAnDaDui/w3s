@@ -18,6 +18,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <spring-boot.version>2.5.6</spring-boot.version>
+        <w3s.version>1.0</w3s.version>
     </properties>
 
     <dependencyManagement>
@@ -37,10 +38,12 @@
             <dependency>
                 <groupId>com.github.baoan.w3s</groupId>
                 <artifactId>w3s-core</artifactId>
+                <version>${w3s.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.baoan.w3s</groupId>
                 <artifactId>spring-boot-starter</artifactId>
+                <version>${w3s.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -191,4 +191,8 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
         this.webSocketService = webSocketService;
     }
 
+    @Autowired
+    public void setWssConf(WssConf wssConf) {
+        this.wssConf = wssConf;
+    }
 }

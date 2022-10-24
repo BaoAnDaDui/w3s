@@ -26,7 +26,6 @@ public class DefaultLocalSubscriptionManager implements LocalSubscriptionManager
     @PostConstruct
     public void initExecutor() {
         subscriptionUpdateExecutor = new ThreadPoolExecutor(4, 100, 60, TimeUnit.SECONDS, new SynchronousQueue<>(), new ThreadPoolExecutor.AbortPolicy());
-
     }
 
     @Override

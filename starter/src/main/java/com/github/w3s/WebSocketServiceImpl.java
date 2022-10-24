@@ -47,7 +47,6 @@ public class WebSocketServiceImpl implements WebSocketService {
     @PostConstruct
     public void initExecutor() {
         executor = new ThreadPoolExecutor(20, 100, 60, TimeUnit.SECONDS, new SynchronousQueue<>(), new ThreadPoolExecutor.AbortPolicy());
-
         ScheduledExecutorService pingExecutor = Executors.newSingleThreadScheduledExecutor();
         pingExecutor.scheduleWithFixedDelay(this::sendPing, wssConf.getPingTimeout()/ wssConf.getNumberOfPingAttempts(), wssConf.getPingTimeout() / wssConf.getNumberOfPingAttempts(), TimeUnit.MILLISECONDS);
     }
