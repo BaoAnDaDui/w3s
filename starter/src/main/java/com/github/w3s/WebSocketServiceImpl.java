@@ -2,11 +2,7 @@ package com.github.w3s;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.w3s.core.SubscriptionMsg;
-import com.github.w3s.core.WebSocketMsgEndpoint;
-import com.github.w3s.core.service.LocalSubscriptionManager;
-import com.github.w3s.core.service.ServiceCallback;
-import com.github.w3s.core.service.WebSocketService;
+import com.github.w3s.core.*;
 import com.github.w3s.core.session.SessionEvent;
 import com.github.w3s.core.session.WebSocketSessionRef;
 import com.github.w3s.core.subscription.*;
@@ -14,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Import;
 import org.springframework.web.socket.CloseStatus;
 
 import javax.annotation.PostConstruct;
@@ -30,10 +25,6 @@ import java.util.concurrent.*;
  * @author wang xiao
  * date 2022/5/11
  */
-@Import( value = {
-        com.github.w3s.W3sConf.class,
-        com.github.w3s.DefaultLocalSubscriptionManager.class
-})
 @ConditionalOnProperty(prefix = "w3s", name = "opened", havingValue = "true")
 public class WebSocketServiceImpl implements WebSocketService {
 
@@ -195,7 +186,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
     private void unsubscribe(SubscriptionCmd cmd, String sessionId) {
-        localSubscriptionService.cancelSubscription(sessionId, cmd.getSubId());
+        localSubscriptionService.cancelSubscription(cmd.getEntityId(), cmd.getSubId());
     }
 
     /**

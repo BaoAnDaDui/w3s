@@ -1,9 +1,9 @@
 package com.github.w3s;
 
+import com.github.w3s.core.WebSocketAuthService;
 import com.github.w3s.core.WebSocketMsgEndpoint;
+import com.github.w3s.core.WebSocketService;
 import com.github.w3s.core.WssException;
-import com.github.w3s.core.service.WebSocketAuthService;
-import com.github.w3s.core.service.WebSocketService;
 import com.github.w3s.core.session.SessionEvent;
 import com.github.w3s.core.session.SessionMetaData;
 import com.github.w3s.core.session.WebSocketSessionRef;
@@ -35,8 +35,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author wang xiao
  * date 2022/5/11
  */
-@ConditionalOnProperty(prefix = "w3s", name = "opened", havingValue = "true")
-public class WebSocketHandler extends TextWebSocketHandler implements WebSocketMsgEndpoint {
+public class W3sWebSocketHandler extends TextWebSocketHandler implements WebSocketMsgEndpoint {
 
 
     /**
@@ -47,7 +46,7 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
      * 外部是 session 引用id 与 webSocket session id
      */
     private static final ConcurrentMap<String, String> EXTERNAL_SESSION_MAP = new ConcurrentHashMap<>();
-    private final Logger logger = LoggerFactory.getLogger(WebSocketHandler.class);
+    private final Logger logger = LoggerFactory.getLogger(W3sWebSocketHandler.class);
     private Optional<WebSocketAuthService> webSocketAuthServer;
 
 
@@ -197,4 +196,5 @@ public class WebSocketHandler extends TextWebSocketHandler implements WebSocketM
     public void setWssConf(W3sConf wssConf) {
         this.wssConf = wssConf;
     }
+
 }

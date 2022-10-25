@@ -1,4 +1,4 @@
-package com.github.w3s.core.service;
+package com.github.w3s.core;
 
 import com.github.w3s.core.session.SessionEvent;
 import com.github.w3s.core.session.WebSocketSessionRef;

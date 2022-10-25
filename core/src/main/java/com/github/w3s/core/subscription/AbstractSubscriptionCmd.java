@@ -28,6 +28,7 @@ public abstract class AbstractSubscriptionCmd implements SubscriptionCmd {
         this.subId = subId;
     }
 
+    @Override
     public String getEntityId() {
         return entityId;
     }
@@ -43,6 +44,7 @@ public abstract class AbstractSubscriptionCmd implements SubscriptionCmd {
     public void setEntityType(String entityType) {
         this.entityType = entityType;
     }
+
 
     @Override
     public boolean isUnSub() {

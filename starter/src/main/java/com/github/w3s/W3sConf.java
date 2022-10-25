@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class W3sConf {
 
 
+    private Boolean opened;
     private String wsUrlPrefix;
 
     private Integer sendTimeOut = 5000;
@@ -22,6 +23,8 @@ public class W3sConf {
     private Integer pingTimeout = 30000;
 
     private Integer numberOfPingAttempts = 20;
+
+    private String connectNeededTokenKey;
 
     public String getWsUrlPrefix() {
         return wsUrlPrefix;
@@ -61,5 +64,21 @@ public class W3sConf {
 
     public void setNumberOfPingAttempts(Integer numberOfPingAttempts) {
         this.numberOfPingAttempts = numberOfPingAttempts;
+    }
+
+    public Boolean getOpened() {
+        return opened;
+    }
+
+    public void setOpened(Boolean opened) {
+        this.opened = opened;
+    }
+
+    public String getConnectNeededTokenKey() {
+        return connectNeededTokenKey;
+    }
+
+    public void setConnectNeededTokenKey(String connectNeededTokenKey) {
+        this.connectNeededTokenKey = connectNeededTokenKey;
     }
 }

@@ -7,3 +7,7 @@ w3s:
   maxSubOfSession: 19
   pingTimeout: 1000
   numberOfPingAttempts: 10
+
+logging:
+  level:
+    root: debug

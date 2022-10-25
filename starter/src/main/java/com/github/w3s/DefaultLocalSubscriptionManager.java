@@ -1,11 +1,11 @@
 package com.github.w3s;
 
 
-import com.github.w3s.core.service.LocalSubscriptionManager;
-import com.github.w3s.core.service.ServiceCallback;
+
+import com.github.w3s.core.LocalSubscriptionManager;
+import com.github.w3s.core.ServiceCallback;
 import com.github.w3s.core.SubscriptionMsg;
 import com.github.w3s.core.subscription.SubscriptionDataUpdate;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import javax.annotation.PostConstruct;
 import java.util.Collections;
@@ -21,7 +21,7 @@ import java.util.concurrent.*;
 
 public class DefaultLocalSubscriptionManager implements LocalSubscriptionManager {
 
-    private final Map<String, Map<Integer, SubscriptionMsg>> subscriptionsBySessionId = new ConcurrentHashMap<>();
+    private final Map<String, Map<Integer, SubscriptionMsg>> subscriptionsByEntityId = new ConcurrentHashMap<>();
 
     private ExecutorService subscriptionUpdateExecutor;
 
@@ -36,37 +36,37 @@ public class DefaultLocalSubscriptionManager implements LocalSubscriptionManager
     }
 
     @Override
-    public void cancelSubscription(String sessionId, int subscriptionId) {
-        Map<Integer, SubscriptionMsg> sessionSubscriptions = subscriptionsBySessionId.get(sessionId);
+    public void cancelSubscription(String entityId, int subscriptionId) {
+        Map<Integer, SubscriptionMsg> sessionSubscriptions = subscriptionsByEntityId.get(entityId);
         if (sessionSubscriptions != null) {
             SubscriptionMsg subscription = sessionSubscriptions.remove(subscriptionId);
             if (subscription != null && sessionSubscriptions.isEmpty()) {
-                subscriptionsBySessionId.remove(sessionId);
+                subscriptionsByEntityId.remove(entityId);
             }
         }
     }
 
     @Override
-    public void cancelAllSessionSubscriptions(String sessionId) {
-        Map<Integer, SubscriptionMsg> subscriptions = subscriptionsBySessionId.get(sessionId);
+    public void cancelAllSessionSubscriptions(String entityId) {
+        Map<Integer, SubscriptionMsg> subscriptions = subscriptionsByEntityId.get(entityId);
         if (subscriptions != null) {
             Set<Integer> toRemove = new HashSet<>(subscriptions.keySet());
-            toRemove.forEach(id -> cancelSubscription(sessionId, id));
+            toRemove.forEach(id -> cancelSubscription(entityId, id));
         }
     }
 
     @Override
-    public <T> void onSubscriptionUpdate(String sessionId, SubscriptionDataUpdate update, ServiceCallback<T> callback) {
-        SubscriptionMsg subscription = subscriptionsBySessionId
-                .getOrDefault(sessionId, Collections.emptyMap()).get(update.getSubId());
+    public <T> void onSubscriptionUpdate(String entityId, SubscriptionDataUpdate update, ServiceCallback<T> callback) {
+        SubscriptionMsg subscription = subscriptionsByEntityId
+                .getOrDefault(entityId, Collections.emptyMap()).get(update.getSubId());
         if (subscription != null) {
-            subscriptionUpdateExecutor.submit(() -> subscription.getUpdateConsumer().accept(sessionId, update));
+            subscriptionUpdateExecutor.submit(() -> subscription.getUpdateConsumer().accept(entityId, update));
         }
         callback.onSuccess(null);
     }
 
     private void registerSubscription(SubscriptionMsg subscription) {
-        Map<Integer, SubscriptionMsg> sessionSubscriptions = subscriptionsBySessionId.computeIfAbsent(subscription.getSessionId(), k -> new ConcurrentHashMap<>(20));
+        Map<Integer, SubscriptionMsg> sessionSubscriptions = subscriptionsByEntityId.computeIfAbsent(subscription.getEntityId(), k -> new ConcurrentHashMap<>(20));
         sessionSubscriptions.put(subscription.getSubId(), subscription);
     }
 

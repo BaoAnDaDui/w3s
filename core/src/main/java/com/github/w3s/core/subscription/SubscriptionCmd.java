@@ -37,4 +37,11 @@ public interface SubscriptionCmd {
     boolean isFirstQuery();
 
 
+    /**
+     * 获取订阅实体id
+     * @return String
+     */
+    String getEntityId();
+
+
 }

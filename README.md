@@ -12,15 +12,48 @@
 - 维护websocket心跳
 - wss 接收到用户订阅之后使用订阅ID 维护订阅列表，当数据变更时候 触发订阅数据更新通知
 - 数据变更 一般是消息队列或者其他地方 直接调用预设的接口
+- 提供用户授权接口与连接限制功能
 
 
 
-## 实现方案 （待补充）
+## 实现方案 
+1. 前端建立websocket 并订阅想要监听的数据 ，订阅消息模版是
+```
+ int subId; // subId  全局唯一
 
+ String entityId; // 订阅实体数据变化 的id
+ 
+ String entityType; // entity type 
+
+ boolean unSub;  // 是否取消订阅
+```
+
+2. 后端收到订阅数据后 将订阅信息存储起来
+
+3. 当某个实体数据变化 比如接收到消息队列数据 使用 LocalSubscriptionManager类的如下方法通知
+```
+<T> void onSubscriptionUpdate(String entityId, SubscriptionDataUpdate update, ServiceCallback<T> callback);
+```
 
 ## 使用 （待完善）
 
 1. 引入包
-
+    ```
+   <dependency>
+            <groupId>com.github.baoan.w3s</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version></version> // 暂时没有传递到仓库 需要本地编译
+   </dependency>
+    ```
 2. 更改配置文件
-3. 启动程序
+```
+w3s:
+  opened: true
+  wsUrlPrefix: ws
+  sendTimeOut: 1000
+  maxSubOfSession: 19
+  pingTimeout: 1000
+  numberOfPingAttempts: 10
+```
+3. 实现授权接口WebSocketAuthService  如果默认不实现则没有鉴权 也不会做连接数限制
+4. 启动程序

@@ -7,27 +7,32 @@
   ],
   "properties": [
     {
-      "name": "com.github.w3s.WssConf.wsUrlPrefix",
+      "name": "com.github.w3s.W3sConf.opened",
+      "type": "java.lang.Boolean",
+      "description": "enabled w3s"
+    },
+    {
+      "name": "com.github.w3s.W3sConf.wsUrlPrefix",
       "type": "java.lang.String",
       "description": "websocket url prefix"
     },
     {
-      "name": "com.github.w3s.WssConf.sendTimeOut",
+      "name": "com.github.w3s.W3sConf.sendTimeOut",
       "type": "java.lang.Integer",
       "description": "websocket send msg time out"
     },
     {
-      "name": "com.github.w3s.WssConf.maxSubOfSession",
+      "name": "com.github.w3s.W3sConf.maxSubOfSession",
       "type": "java.lang.Integer",
       "description": "max subscription of session"
     },
     {
-      "name": "com.github.w3s.WssConf.pingTimeout",
+      "name": "com.github.w3s.W3sConf.pingTimeout",
       "type": "java.lang.Integer",
       "description": "websocket ping msg time out"
     },
     {
-      "name": "com.github.w3s.WssConf.numberOfPingAttempts",
+      "name": "com.github.w3s.W3sConf.numberOfPingAttempts",
       "type": "java.lang.Integer",
       "description": "number of ping attempts"
     }

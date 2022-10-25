@@ -1,4 +1,4 @@
-package com.github.w3s.core.service;
+package com.github.w3s.core;
 
 /**
  * 服务回调
