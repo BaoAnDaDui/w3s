@@ -35,7 +35,7 @@
 <T> void onSubscriptionUpdate(String entityId, SubscriptionDataUpdate update, ServiceCallback<T> callback);
 ```
 
-## 使用 （待完善）
+## 使用
 
 1. 引入包
     ```
@@ -57,3 +57,7 @@ w3s:
 ```
 3. 实现授权接口WebSocketAuthService  如果默认不实现则没有鉴权 也不会做连接数限制
 4. 启动程序
+
+## 功能测试说明
+
+## 压测说明
