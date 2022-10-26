@@ -11,18 +11,20 @@ import java.util.List;
  */
 public class SubscriptionCmdWrapper {
 
-    private List<AbstractSubscriptionCmd> subs;
+    private List<BaseSubscriptionCmd> subs;
 
+    public SubscriptionCmdWrapper() {
+    }
 
-    public SubscriptionCmdWrapper(List<AbstractSubscriptionCmd> subs) {
+    public SubscriptionCmdWrapper(List<BaseSubscriptionCmd> subs) {
         this.subs = subs;
     }
 
-    public List<AbstractSubscriptionCmd> getSubs() {
+    public List<BaseSubscriptionCmd> getSubs() {
         return subs;
     }
 
-    public void setSubs(List<AbstractSubscriptionCmd> subs) {
+    public void setSubs(List<BaseSubscriptionCmd> subs) {
         this.subs = subs;
     }
 }

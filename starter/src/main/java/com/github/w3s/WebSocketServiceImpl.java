@@ -73,7 +73,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             if (Objects.isNull(cmdWrapper)) {
                 return;
             }
-            for (AbstractSubscriptionCmd abstractSubscriptionCmd : cmdWrapper.getSubs()) {
+            for (BaseSubscriptionCmd abstractSubscriptionCmd : cmdWrapper.getSubs()) {
                 if (checkSubscription(sessionRef, abstractSubscriptionCmd)) {
                     handleSubscriptionCmd(sessionRef, abstractSubscriptionCmd);
                 }
@@ -145,7 +145,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     }
 
 
-    private void handleSubscriptionCmd(WebSocketSessionRef sessionRef, AbstractSubscriptionCmd cmd) {
+    private void handleSubscriptionCmd(WebSocketSessionRef sessionRef, BaseSubscriptionCmd cmd) {
         String sessionId = sessionRef.getSessionId();
         if (validateSessionRef(sessionRef, cmd, sessionId)) {
             if (cmd.isUnSub()) {
@@ -197,7 +197,7 @@ public class WebSocketServiceImpl implements WebSocketService {
      * @param callback            callback
      * @param <T>                 T
      */
-    private <T> void validateAndFirstQuery(WebSocketSessionRef webSocketSessionRef, AbstractSubscriptionCmd cmd, ServiceCallback<T> callback) {
+    private <T> void validateAndFirstQuery(WebSocketSessionRef webSocketSessionRef, BaseSubscriptionCmd cmd, ServiceCallback<T> callback) {
         if (cmd.isFirstQuery()) {
 
         }
@@ -218,7 +218,7 @@ public class WebSocketServiceImpl implements WebSocketService {
                 }));
     }
 
-    private SubscriptionMsg buildSubscriptionMsg(String sessionId, AbstractSubscriptionCmd cmd) {
+    private SubscriptionMsg buildSubscriptionMsg(String sessionId, BaseSubscriptionCmd cmd) {
         return SubscriptionMsg.SubscriptionMsgBuilder.builder()
                 .sessionId(sessionId)
                 .subId(cmd.getSubId())

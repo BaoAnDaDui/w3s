@@ -60,7 +60,7 @@ public class DefaultLocalSubscriptionManager implements LocalSubscriptionManager
         SubscriptionMsg subscription = subscriptionsByEntityId
                 .getOrDefault(entityId, Collections.emptyMap()).get(update.getSubId());
         if (subscription != null) {
-            subscriptionUpdateExecutor.submit(() -> subscription.getUpdateConsumer().accept(entityId, update));
+            subscriptionUpdateExecutor.submit(() -> subscription.getUpdateConsumer().accept(subscription.getSessionId(), update));
         }
         callback.onSuccess(null);
     }

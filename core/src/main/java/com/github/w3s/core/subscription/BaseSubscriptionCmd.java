@@ -6,7 +6,7 @@ package com.github.w3s.core.subscription;
  * @author wang xiao
  * date 2022/5/11
  */
-public abstract class AbstractSubscriptionCmd implements SubscriptionCmd {
+public class BaseSubscriptionCmd implements SubscriptionCmd {
 
     private int subId;
 
@@ -49,6 +49,11 @@ public abstract class AbstractSubscriptionCmd implements SubscriptionCmd {
     @Override
     public boolean isUnSub() {
         return unSub;
+    }
+
+    @Override
+    public boolean isFirstQuery() {
+        return false;
     }
 
     public void setUnSub(boolean unSub) {

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanCreationNotAllowedException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.PongMessage;
 import org.springframework.web.socket.TextMessage;
@@ -78,7 +77,7 @@ public class W3sWebSocketHandler extends TextWebSocketHandler implements WebSock
             String internalSessionId = session.getId();
             WebSocketSessionRef sessionRef = toRef(session);
             String externalSessionId = sessionRef.getSessionId();
-            boolean authRes = webSocketAuthServer.map(e -> e.checkLimits(internalSessionId, sessionRef.getUserId())).orElse(false);
+            boolean authRes = webSocketAuthServer.map(e -> e.checkLimits(internalSessionId, sessionRef.getUserId())).orElse(true);
             if (!authRes) {
                 return;
             }

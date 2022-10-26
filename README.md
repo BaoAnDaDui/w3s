@@ -55,9 +55,15 @@ w3s:
   pingTimeout: 1000
   numberOfPingAttempts: 10
 ```
-3. 实现授权接口WebSocketAuthService  如果默认不实现则没有鉴权 也不会做连接数限制
+
+3. 实现授权接口WebSocketAuthService 如果默认不实现则没有鉴权 也不会做连接数限制
 4. 启动程序
+5. 具体参考 example 模块代码
 
 ## 功能测试说明
 
+1. 数据能正常订阅与推送
+
 ## 压测说明
+
+1.jmh 测试
