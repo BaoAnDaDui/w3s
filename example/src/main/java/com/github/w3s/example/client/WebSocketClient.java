@@ -27,10 +27,11 @@ public class WebSocketClient {
         String line = "";
         do {
             line = reader.readLine();
-            if (line.equals("exit")) {
+            String exit = "exit";
+            if (exit.equals(line)) {
                 System.exit(0);
             }
-        } while (!line.equals("exit"));
+        } while (true);
     }
 
     public Session getSession() {
